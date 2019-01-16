@@ -12,10 +12,6 @@ filter = 'Google Online Clinical Seminar Science Program University Course Calen
          'Report Reports Reporting Privacy Security Spotlight Faculty Houston Texas Austin Directory /' \
          'Button /a Academy Physics'
 
-# Install notes (in terminal)
-# import nltk
-# nltk.download()
-
 def get_human_names(text):
     tokens = nltk.tokenize.word_tokenize(text)
     pos = nltk.pos_tag(tokens)
