@@ -6,10 +6,10 @@ from urllib.parse import quote
 from nameparser.parser import HumanName
 from time import sleep
 
-
-url = 'https://cm.utexas.edu/component/cobalt/category-items/1-directory/12-chemistry?Itemid=1252' #lab link
-url2 = 'https://scholar.google.com/citations?view_op=search_authors&mauthors=' #google scholar author search link
-url3 = 'https://scholar.google.ru/citations?user=' #google scholar user link
+url1 = 'https://cm.utexas.edu/component/cobalt/category-items/1-directory/12-chemistry?Itemid=1252' # Lab link
+url2 = 'https://scholar.google.com/citations?view_op=search_authors&mauthors=' # Google scholar author search link
+url3 = 'https://scholar.google.ru/citations?user=' # Google scholar user link
+school_name = 'University of Texas at Austin'
 
 filter = 'Google Online Clinical Seminar Science Program University Course Calendar ' \
          'Phone Plan FAQ Research Professor Award Bar Name Names Cognitive Neuroscience Campus ' \
@@ -25,7 +25,6 @@ filter = 'Google Online Clinical Seminar Science Program University Course Calen
          'Professorship Ecology Evolution Coordinator Forms Form Active Learn Learning Education' \
          'Educator Curriculum Active Form Forms Chair Biology Molecular Swap Employee Jr Telescope' \
          'Future Table Tables Information Safety Informations Facility Facilities Nuclear Xray'
-url_dict = {}
 
 class AppURLOpener(FancyURLopener):
     version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
@@ -50,14 +49,13 @@ def get_human_names(text):
 
     return (person_list)
 
-
 def sortedSentence(Sentence):
-    words = Sentence.split(" ")
+    words = Sentence.split(' ')
     words.sort()
-    newSentence = " ".join(words)
+    newSentence = ' '.join(words)
     return newSentence
 
-def filterbyvalue(seq, value):
+def filterbyvalue(seq, value):  # NEED2 CORRECT EXCEPTION SECTION
     for el in seq[:]:
         for word in el.split():
             if word in value:
@@ -74,45 +72,65 @@ def filterbyvalue(seq, value):
            pass
     return seq
 
+def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):  # NEED2 CORRECT EXCEPTION SECTION
+    user_tag = '&amp;user='
+    HTML = urllib.request.urlopen(in_url1)  # Getting Lab page content
+    txt = HTML.read().decode('utf-8').replace(',', ' ').replace('>', ' ').replace('<', ' ').replace('.', '')
 
-HTML = urllib.request.urlopen(url)
-txt = HTML.read().decode('utf-8').replace(',', ' ').replace('>', ' ').replace('<', ' ').replace('.','')
+    # Code-block for conversion 'Name-Name Lastname' to 'Namename Lastname'.
+    # Doesn't work on 'big' strings: Out-of-index.
+    # dash_indexes = [m.start() for m in re.finditer('-', txt)]
+    # for i in dash_indexes:
+    #    txt = txt[:i] + txt[i+1].lower() + txt[i+2:]
 
-## Code-block for conversion 'Name-Name Lastname' to 'Namename Lastname'.
-## Doesn't work on 'big' strings: Out-of-index.
-## dash_indexes = [m.start() for m in re.finditer('-', txt)]
-## for i in dash_indexes:
-##    txt = txt[:i] + txt[i+1].lower() + txt[i+2:]
+    txt = ' '.join([w for w in txt.split() if len(w) > 1]).replace('-', '')
 
-txt= ' '.join( [w for w in txt.split() if len(w)>1] ).replace('-', '')
+    names = get_human_names(txt)  # Names var contains all the names, scrapped from web url
+    filterbyvalue(names, in_filter)
 
-names = get_human_names(txt) # Names var contains all the names, scrapped from web url
-filterbyvalue(names, filter)
+    print('FIRST LAST')
+    i = 0  # Counter of publicised scientists
+    n = str(len(names))  # Counter of scientists in the Lab
+    output = {'FIRST LAST':'GS account link'}
 
-print("FIRST LAST")
-i = 0 # Counter of publicated scientists
-n = str(len(names)) # Counter of scientists in the Lab
+    for name in names[:]:
+        last_first = HumanName(name).last + ' ' + HumanName(name).first
+        openurl = AppURLOpener().open
 
-for name in names[:]:
-    last_first = HumanName(name).last + ' ' + HumanName(name).first
-    query = last_first
+        try:
+            sleep(1 + 2 * random.random())  # Timeout for google web pages, not robot :)
+            cont = openurl(in_url2 + quote(last_first)).read().decode("utf-8") # Getting content GS page
+        except:
+            pass
+            print(last_first + '; ' + '!!!Google Scholar web parse error!!!')
+            output['last_first'] = '!!!Google Scholar web parse error!!!'
+            continue
+        pos1 = cont.find(user_tag)
+        if pos1 < 0:    # No GS account found
+            names.pop(names.index(name))
 
-    openurl = AppURLOpener().open
-    try:
-        sleep(1+2*random.random())    # Timeout for google web pages, not robot :)
-        cont = openurl(url2 + quote(query)).read().decode("utf-8")
-    except:
-        pass
-        print(last_first + "; " + "!!!Google Scholar web parse error!!!")
-        continue
-    pos1 = cont.find("&amp;user=")
-    if pos1 < 0:
-        names.pop(names.index(name))
-    else:
-        pos2 = cont.find("&amp;", pos1 + 1)
-        gslink = url3 + cont[pos1 + 10:pos2]
-        print(last_first + "; " + gslink)
-        i += 1
+        else:
+            if cont.count(user_tag) > 3: # Multiply GS accounts validation; 3 user IDs for one page means found only 1 user.
+                print('More than one account found.')
+                if cont.find(in_sch_name) > 0: # Searching for school name
+                    pos1 = cont.find(user_tag, cont.find(in_sch_name))  # Getting the first ID after school name
+                                                                        # ERROR!!!!
+                                                                        # Wrong picked, need correction for search position.
+                    print('School found, account identified:')
+                else:
+                    print('School not found, picking first:')
+            pos2 = cont.find('&amp;', pos1 + 1)
+            gslink = in_url3 + cont[pos1 + 10:pos2] # Concat GS url + ID value
+            print(last_first + "; " + gslink)
+            output['last_first'] = gslink
+            i += 1
 
-print('-- Total people on lab page: ' + str(n))
-print('-- Total with G.S. profiles: ' + str(i))
+    print('-- Total people on lab page: ' + str(n))
+    print('-- Total with G.S. profiles: ' + str(i))
+
+    return output
+
+
+# MAIN
+
+body_parser(url1, url2, url3, filter, school_name)
