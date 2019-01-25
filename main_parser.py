@@ -1,10 +1,13 @@
 import urllib.request
 import nltk
+import random
 from urllib.request import FancyURLopener
 from urllib.parse import quote
 from nameparser.parser import HumanName
+from time import sleep
 
-url = 'https://liberalarts.utexas.edu/sociology/faculty/index.php?ci=1893' #lab link
+
+url = 'https://cm.utexas.edu/component/cobalt/category-items/1-directory/12-chemistry?Itemid=1252' #lab link
 url2 = 'https://scholar.google.com/citations?view_op=search_authors&mauthors=' #google scholar author search link
 url3 = 'https://scholar.google.ru/citations?user=' #google scholar user link
 
@@ -16,9 +19,12 @@ filter = 'Google Online Clinical Seminar Science Program University Course Calen
          'Organizations Post Research Researcher System Systems Management Operation Operations' \
          'Report Reports Reporting Privacy Security Spotlight Faculty Houston Texas Austin Directory /' \
          'Button Academy Physics Human Humans Resource Resources Gender Sex Load Mechanism CMS Cascade' \
-         '/a /p Ties Sociology Economic Economics History Power Image Images Main Demography Lab Labs' \
+         '/a /p  /strong Ties Sociology Economic Economics History Power Image Images Main Demography Lab Labs' \
          'Urban Rapoport Centennial America Latin Race Inequality Analysis Jury Method Methods Race' \
-         'Make Gift Work Works Occupation'
+         'Make Gift Work Works Occupationv Program Programs View Views Switch Switches /button Professor' \
+         'Professorship Ecology Evolution Coordinator Forms Form Active Learn Learning Education' \
+         'Educator Curriculum Active Form Forms Chair Biology Molecular Swap Employee Jr Telescope' \
+         'Future Table Tables Information Safety Informations Facility Facilities Nuclear Xray'
 url_dict = {}
 
 class AppURLOpener(FancyURLopener):
@@ -45,6 +51,12 @@ def get_human_names(text):
     return (person_list)
 
 
+def sortedSentence(Sentence):
+    words = Sentence.split(" ")
+    words.sort()
+    newSentence = " ".join(words)
+    return newSentence
+
 def filterbyvalue(seq, value):
     for el in seq[:]:
         for word in el.split():
@@ -53,9 +65,14 @@ def filterbyvalue(seq, value):
                     seq.pop(seq.index(el))
                 except:
                     pass
-        if len(el.split()) == 1:
-            seq.pop(seq.index(el))
-    return (seq)
+        try:
+            if (len(el.split()) == 1) or \
+                    (sortedSentence(el) == sortedSentence(seq[seq.index(el)+1])):
+                seq.pop(seq.index(el))  # Filtering Capital Letters in middle name and
+                                        # doubles like a,b - b,a
+        except:
+           pass
+    return seq
 
 
 HTML = urllib.request.urlopen(url)
@@ -69,18 +86,25 @@ txt = HTML.read().decode('utf-8').replace(',', ' ').replace('>', ' ').replace('<
 
 txt= ' '.join( [w for w in txt.split() if len(w)>1] ).replace('-', '')
 
-names = get_human_names(txt) #names var contains all the names, scrapped from web url
+names = get_human_names(txt) # Names var contains all the names, scrapped from web url
 filterbyvalue(names, filter)
 
 print("FIRST LAST")
 i = 0 # Counter of publicated scientists
 n = str(len(names)) # Counter of scientists in the Lab
+
 for name in names[:]:
     last_first = HumanName(name).last + ' ' + HumanName(name).first
     query = last_first
 
     openurl = AppURLOpener().open
-    cont = openurl(url2 + quote(query)).read().decode("utf-8")
+    try:
+        sleep(1+2*random.random())    # Timeout for google web pages, not robot :)
+        cont = openurl(url2 + quote(query)).read().decode("utf-8")
+    except:
+        pass
+        print(last_first + "; " + "!!!Google Scholar web parse error!!!")
+        continue
     pos1 = cont.find("&amp;user=")
     if pos1 < 0:
         names.pop(names.index(name))
@@ -90,5 +114,5 @@ for name in names[:]:
         print(last_first + "; " + gslink)
         i += 1
 
-print('Total in the laboratory: ' + str(n))
-print('Total with G.S. profile: ' + str(i))
+print('-- Total people on lab page: ' + str(n))
+print('-- Total with G.S. profiles: ' + str(i))

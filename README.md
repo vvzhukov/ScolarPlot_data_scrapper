@@ -1,12 +1,11 @@
 # Description
 Parsing web page, getting Firstname and Lastname.
-Variables:
-url <- webpage url
-filter <- add filter for garbage cleaning
-names <- result
+Input variables described in comments.
 
 # Requirements
-nltk, urllib.request, nameparser.parser
+Python3
+Libs:
+nltk, urllib.request, nameparser.parser, time
 
 # Install notes
 In terminal
