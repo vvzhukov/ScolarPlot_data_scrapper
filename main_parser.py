@@ -27,7 +27,8 @@ filter = 'Google Online Clinical Seminar Science Program University Course Calen
          'Future Table Tables Information Safety Informations Facility Facilities Nuclear Xray'
 
 class AppURLOpener(FancyURLopener):
-    version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
+    version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) ' \
+              'Chrome/33.0.1750.152 Safari/537.36'
 
 def get_human_names(text):
     tokens = nltk.tokenize.word_tokenize(text)
@@ -39,7 +40,7 @@ def get_human_names(text):
     for subtree in sentt.subtrees(filter=lambda t: t.label() == 'PERSON'):
         for leaf in subtree.leaves():
             person.append(leaf[0])
-        if len(person) > 1: #avoid grabbing lone surnames
+        if len(person) > 1: # Avoid grabbing lone surnames
             for part in person:
                 name += part + ' '
             if name[:-1] not in person_list:
@@ -61,6 +62,7 @@ def filterbyvalue(seq, value):  # NEED2 CORRECT EXCEPTION SECTION
             if word in value:
                 try:
                     seq.pop(seq.index(el))
+
                 except:
                     pass
         try:
@@ -72,9 +74,9 @@ def filterbyvalue(seq, value):  # NEED2 CORRECT EXCEPTION SECTION
            pass
     return seq
 
-def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):  # NEED2 CORRECT EXCEPTION SECTION
+def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):     # NEED2 CORRECT EXCEPTION SECTION
     user_tag = '&amp;user='
-    HTML = urllib.request.urlopen(in_url1)  # Getting Lab page content
+    HTML = urllib.request.urlopen(in_url1)      # Getting Lab page content
     txt = HTML.read().decode('utf-8').replace(',', ' ').replace('>', ' ').replace('<', ' ').replace('.', '')
 
     # Code-block for conversion 'Name-Name Lastname' to 'Namename Lastname'.
@@ -85,12 +87,14 @@ def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):  # NEED2 COR
 
     txt = ' '.join([w for w in txt.split() if len(w) > 1]).replace('-', '')
 
-    names = get_human_names(txt)  # Names var contains all the names, scrapped from web url
+    names = get_human_names(txt)    # Names var contains all the names, scrapped from web url
     filterbyvalue(names, in_filter)
 
     print('FIRST LAST')
-    i = 0  # Counter of publicised scientists
-    n = str(len(names))  # Counter of scientists in the Lab
+    i = 0   # Counter of publicised scientists
+    m = 0   # Multi accounts
+    k = 0   # Found by school
+    n = str(len(names))     # Counter of scientists in the Lab
     output = {'FIRST LAST':'GS account link'}
 
     for name in names[:]:
@@ -106,16 +110,18 @@ def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):  # NEED2 COR
             output['last_first'] = '!!!Google Scholar web parse error!!!'
             continue
         pos1 = cont.find(user_tag)
-        if pos1 < 0:    # No GS account found
+        if pos1 < 0:        # No GS account found
             names.pop(names.index(name))
 
         else:
-            if cont.count(user_tag) > 3: # Multiply GS accounts validation; 3 user IDs for one page means found only 1 user.
+            if cont.count(user_tag) > 3:    # Multiply GS accounts validation; 3 user IDs ~ 1 user.
+                m += 1
                 print('More than one account found.')
-                if cont.find(in_sch_name) > 0: # Searching for school name
-                    pos1 = cont.find(user_tag, cont.find(in_sch_name))  # Getting the first ID after school name
-                                                                        # ERROR!!!!
-                                                                        # Wrong picked, need correction for search position.
+                if cont.find(in_sch_name) > 0:  # Searching for school name
+                    k += 1
+                    pos1 = cont.find(user_tag, cont.find(in_sch_name) - 350)    # Getting the first ID after schl name
+                                                                                # 350 symbols from the SchoolName
+                                                                                # hardcode - bad
                     print('School found, account identified:')
                 else:
                     print('School not found, picking first:')
@@ -126,7 +132,7 @@ def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):  # NEED2 COR
             i += 1
 
     print('-- Total people on lab page: ' + str(n))
-    print('-- Total with G.S. profiles: ' + str(i))
+    print('-- Total with G.S. profiles: ' + str(i) + ' (multi acc: ' + str(m) + '; school identified: ' + str(k) + ')')
 
     return output
 
