@@ -1,6 +1,7 @@
 import urllib.request
 import nltk
 import random
+import numpy
 from urllib.request import FancyURLopener
 from urllib.parse import quote
 from nameparser.parser import HumanName
@@ -30,7 +31,11 @@ filter = 'Google Online Clinical Seminar Science Program University Course Calen
          'Chemistry Organic Inorganic Major Global Globals Award Awards Awarded Welcome' \
          'Alumna Electron Microscopy Matter Matters Nanoscale PhD Lecturer Postdoc Postdocs ' \
          'NYU Math Maths Architectural Architecture Earth Supervisor Supervisors Surface ' \
-         'Subserface Deep Climate Water'
+         'Subserface Deep Climate Water Trip Trips Workshop Workshops Lectures Public Home' \
+         'Staff Academic Academics Assistant Scientific Scholar Administrative Manager Managers' \
+         'Finance Biochemistry Marine Fax Number Biogeochemistry Appointment Appointments Geometry' \
+         'Algebraic Applied Mathematical Lectureship Code Computing Mobile Startup Robotics Robotic' \
+         'Engineering Explore Conosortium Get Involved Advisory Council'
 
 class AppURLOpener(FancyURLopener):
     version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) ' \
