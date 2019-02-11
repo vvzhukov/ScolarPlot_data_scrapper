@@ -7,7 +7,7 @@ from urllib.parse import quote
 from nameparser.parser import HumanName
 from time import sleep
 
-url1 = 'https://www.cs.utexas.edu/faculty' # Dept link
+url1 = 'https://www.uh.edu/class/philosophy/people/' # Dept link
 url2 = 'http://scholar.google.com/citations?view_op=search_authors&mauthors=' # Google scholar author search link
 url3 = 'https://scholar.google.ru/citations?user=' # Google scholar user link
 school_name = 'University of Texas at Austin'
@@ -35,7 +35,13 @@ filter = 'Google Online Clinical Seminar Science Program University Course Calen
          'Staff Academic Academics Assistant Scientific Scholar Administrative Manager Managers' \
          'Finance Biochemistry Marine Fax Number Biogeochemistry Appointment Appointments Geometry' \
          'Algebraic Applied Mathematical Lectureship Code Computing Mobile Startup Robotics Robotic' \
-         'Engineering Explore Conosortium Get Involved Advisory Council'
+         'Engineering Explore Conosortium Get Involved Advisory Council Training Consulting Free ' \
+         'Tutorials FAQ FAQs Sciences Data Discovery Pattern Patterns Recognition Email Development' \
+         'Principles Gas Gases Model Modeling Develop Development Language Languages Algoritm Algoritms' \
+         'Numerical Game Serious France Germany Center Anixiety Therapy Theories Relationship Certified' \
+         'Board Thoughts Child Center Stress Laboratory Daily Promotion Psychology Room Anxiety Institute' \
+         'Econometrics Empire Energy Mexican Environment Courses Past Philosophy Ethics Aesthetics' \
+         'College Library Epistomology Ethics Hall'
 
 class AppURLOpener(FancyURLopener):
     version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) ' \
