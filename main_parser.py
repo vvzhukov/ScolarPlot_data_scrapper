@@ -7,7 +7,7 @@ from urllib.parse import quote
 from nameparser.parser import HumanName
 from time import sleep
 
-url1 = 'https://www.uh.edu/class/philosophy/people/' # Dept link
+url1 = 'https://www.opt.uh.edu/research-at-uhco/research-faculty/' # Dept link
 url2 = 'http://scholar.google.com/citations?view_op=search_authors&mauthors=' # Google scholar author search link
 url3 = 'https://scholar.google.ru/citations?user=' # Google scholar user link
 school_name = 'University of Texas at Austin'
@@ -15,12 +15,12 @@ school_name = 'University of Texas at Austin'
 filter = 'Google Online Clinical Seminar Science Program University Course Calendar ' \
          'Phone Plan FAQ Research Professor Award Bar Name Names Cognitive Neuroscience Campus ' \
          'Support Archive Awards Career Alumni Fellowship Page Pages Map Maps Contact Advance' \
-         'Medium Up Health School Endowment City Unit Link Links Media Body Content Head Degree ' \
+         'Medium Up Health School Endowment City Unit Link LinksUH Media Body Content Head Degree ' \
          'Certification Dynamic Dynamics Network Networks Study Fund Student Students organization' \
          'Organizations Post Research Researcher System Systems Management Operation Operations' \
          'Report Reports Reporting Privacy Security Spotlight Faculty Houston Texas Austin Directory /' \
          'Button Academy Physics Human Humans Resource Resources Gender Sex Load Mechanism CMS Cascade' \
-         '/a /p  /strong Ties Sociology Economic Economics History Power Image Images Main Demography Lab Labs' \
+         '/a /p /u /strong Ties Sociology Economic Economics History Power Image Images Main Demography Lab Labs' \
          'Urban Rapoport Centennial America Latin Race Inequality Analysis Jury Method Methods Race' \
          'Make Gift Work Works Occupationv Program Programs View Views Switch Switches /button Professor' \
          'Professorship Ecology Evolution Coordinator Forms Form Active Learn Learning Education' \
@@ -41,7 +41,8 @@ filter = 'Google Online Clinical Seminar Science Program University Course Calen
          'Numerical Game Serious France Germany Center Anixiety Therapy Theories Relationship Certified' \
          'Board Thoughts Child Center Stress Laboratory Daily Promotion Psychology Room Anxiety Institute' \
          'Econometrics Empire Energy Mexican Environment Courses Past Philosophy Ethics Aesthetics' \
-         'College Library Epistomology Ethics Hall'
+         'College Library Epistomology Ethics Hall Visit OD Us US I II Investigator Pediator Sensing' \
+         ''
 
 class AppURLOpener(FancyURLopener):
     version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) ' \
@@ -160,56 +161,3 @@ def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):     # NEED2 
 body_parser(url1, url2, url3, filter, school_name)
 
 exit()
-'''
-No more than 3800 per hour! Limitation from Google. Thanks to Mohammed's emperical testing.
-Test Results
-1. school_name = 'University of Texas at Austin'
-
-1.1. Physics: https://ph.utexas.edu/component/cobalt/category-items/1-directory/18-physics?Itemid=1264
--- Total people on dep page: 54
--- Total with G.S. profiles: 19 (multi acc: 8; school identified: 1)
-In ScholarPlot: 12 profiles
-
-1.2. Mathematics: https://www.ma.utexas.edu/component/cobalt/category-items/1-directory/15-mathematics?Itemid=1334
--- Total people on dep page: 63
--- Total with G.S. profiles: 19 (multi acc: 12; school identified: 2)
-In ScholarPlot: 20 profiles
-
-1.3. Neuroscience: https://neuroscience.utexas.edu/component/cobalt/category-items/1-directory/17-neuroscience?Itemid=1225
--- Total people on dep page: 59
--- Total with G.S. profiles: 23 (multi acc: 8; school identified: 1)
-In ScholarPlot: 13 profiles
-
-2. school_name = 'New York University'
-2.1 Biology: http://as.nyu.edu/biology/people/faculty.html
--- Total people on dep page: 85
--- Total with G.S. profiles: 43 (multi acc: 12; school identified: 4)
-In ScholarPlot: 34
-
-2.2 Chemistry: http://as.nyu.edu/chemistry/people/faculty.html
--- Total people on dep page: 96
--- Total with G.S. profiles: 30 (multi acc: 16; school identified: 3)
-In ScholarPlot: 19
-
-2.3 Mathematics: https://www.math.nyu.edu/dynamic/people/faculty/
-
-
-In ScholarPlot: 30
-
-3. school_name = 'Columbia University'
-3.1 Film: https://arts.columbia.edu/film/faculty
-
-
-In ScholarPlot: 0 profiles
-
-3.2 Visual Arts: https://arts.columbia.edu/visual-arts/faculty
-
-In ScholarPlot: 0 profiles
-
-
-3.3 Writing: https://arts.columbia.edu/writing/faculty
-
-
-In ScholarPlot: 0 profiles
-
-'''
