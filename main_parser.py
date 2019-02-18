@@ -7,10 +7,10 @@ from urllib.parse import quote
 from nameparser.parser import HumanName
 from time import sleep
 
-url1 = 'https://www.opt.uh.edu/research-at-uhco/research-faculty/' # Dept link
+url1 = 'https://www.polisci.northwestern.edu/people/core-faculty/' # Dept link
 url2 = 'http://scholar.google.com/citations?view_op=search_authors&mauthors=' # Google scholar author search link
 url3 = 'https://scholar.google.ru/citations?user=' # Google scholar user link
-school_name = 'University of Texas at Austin'
+school_name = 'Northwestern University'
 
 filter = 'Google Online Clinical Seminar Science Program University Course Calendar ' \
          'Phone Plan FAQ Research Professor Award Bar Name Names Cognitive Neuroscience Campus ' \
@@ -42,7 +42,8 @@ filter = 'Google Online Clinical Seminar Science Program University Course Calen
          'Board Thoughts Child Center Stress Laboratory Daily Promotion Psychology Room Anxiety Institute' \
          'Econometrics Empire Energy Mexican Environment Courses Past Philosophy Ethics Aesthetics' \
          'College Library Epistomology Ethics Hall Visit OD Us US I II Investigator Pediator Sensing' \
-         ''
+         'Grants Result Results Test Tests Department Studies Anthropology Job Opportunities Nature' \
+         'Technology Islam Civilization Jewish Senior Behaviour Brain Adviser Lead'
 
 class AppURLOpener(FancyURLopener):
     version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) ' \
