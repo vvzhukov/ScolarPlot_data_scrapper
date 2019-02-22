@@ -7,10 +7,10 @@ from urllib.parse import quote
 from nameparser.parser import HumanName
 from time import sleep
 
-url1 = 'https://www.polisci.northwestern.edu/people/core-faculty/' # Dept link
+url1 = 'https://www.chemistry.northwestern.edu/people/research-faculty/' # Dept link
 url2 = 'http://scholar.google.com/citations?view_op=search_authors&mauthors=' # Google scholar author search link
 url3 = 'https://scholar.google.ru/citations?user=' # Google scholar user link
-school_name = 'Northwestern University'
+school_name = 'Northwestern'
 
 filter = 'Google Online Clinical Seminar Science Program University Course Calendar ' \
          'Phone Plan FAQ Research Professor Award Bar Name Names Cognitive Neuroscience Campus ' \
@@ -20,7 +20,7 @@ filter = 'Google Online Clinical Seminar Science Program University Course Calen
          'Organizations Post Research Researcher System Systems Management Operation Operations' \
          'Report Reports Reporting Privacy Security Spotlight Faculty Houston Texas Austin Directory /' \
          'Button Academy Physics Human Humans Resource Resources Gender Sex Load Mechanism CMS Cascade' \
-         '/a /p /u /strong Ties Sociology Economic Economics History Power Image Images Main Demography Lab Labs' \
+         '/a /p /u /i /strong Ties Sociology Economic Economics History Power Image Images Main Demography Lab Labs' \
          'Urban Rapoport Centennial America Latin Race Inequality Analysis Jury Method Methods Race' \
          'Make Gift Work Works Occupationv Program Programs View Views Switch Switches /button Professor' \
          'Professorship Ecology Evolution Coordinator Forms Form Active Learn Learning Education' \
@@ -43,7 +43,11 @@ filter = 'Google Online Clinical Seminar Science Program University Course Calen
          'Econometrics Empire Energy Mexican Environment Courses Past Philosophy Ethics Aesthetics' \
          'College Library Epistomology Ethics Hall Visit OD Us US I II Investigator Pediator Sensing' \
          'Grants Result Results Test Tests Department Studies Anthropology Job Opportunities Nature' \
-         'Technology Islam Civilization Jewish Senior Behaviour Brain Adviser Lead'
+         'Technology Islam Civilization Jewish Senior Behaviour Brain Adviser Lead Dane Admission Gallery' \
+         'Photo Volunteer Photostream Division Dance Area Performance Design Box Office Costume Theory' \
+         'Critical Participation Astronomy Interdisciplinaria Year Fourth Lectures Adjunct Tracks Curricular' \
+         'Celeste Survey Archaeological African American Teaching Secrets Identity Action Book Life Street Poor' \
+         'Labour Century Britain'
 
 class AppURLOpener(FancyURLopener):
     version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) ' \
@@ -146,7 +150,10 @@ def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):     # NEED2 
                     ## print('School not found, picking first:')
                     names.pop(names.index(name))
             pos2 = cont.find('&amp;', pos1 + 1)
-            gslink = in_url3 + cont[pos1 + 10:pos2] # Concat GS url + ID value
+            if pos2-pos1 > 20:
+                gslink = "!!!Parser error, too long gs link!!!"
+            else:
+                gslink = in_url3 + cont[pos1 + 10:pos2] # Concat GS url + ID value
             print(last_first + "; " + gslink)
             output['last_first'] = gslink
             i += 1
