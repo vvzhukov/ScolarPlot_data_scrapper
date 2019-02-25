@@ -7,47 +7,42 @@ from urllib.parse import quote
 from nameparser.parser import HumanName
 from time import sleep
 
-url1 = 'https://www.chemistry.northwestern.edu/people/research-faculty/' # Dept link
+url1 = 'https://www.frenchanditalian.northwestern.edu/people/faculty/affiliated/' # Dept link
 url2 = 'http://scholar.google.com/citations?view_op=search_authors&mauthors=' # Google scholar author search link
 url3 = 'https://scholar.google.ru/citations?user=' # Google scholar user link
 school_name = 'Northwestern'
 
-filter = 'Google Online Clinical Seminar Science Program University Course Calendar ' \
-         'Phone Plan FAQ Research Professor Award Bar Name Names Cognitive Neuroscience Campus ' \
-         'Support Archive Awards Career Alumni Fellowship Page Pages Map Maps Contact Advance' \
-         'Medium Up Health School Endowment City Unit Link LinksUH Media Body Content Head Degree ' \
-         'Certification Dynamic Dynamics Network Networks Study Fund Student Students organization' \
-         'Organizations Post Research Researcher System Systems Management Operation Operations' \
-         'Report Reports Reporting Privacy Security Spotlight Faculty Houston Texas Austin Directory /' \
-         'Button Academy Physics Human Humans Resource Resources Gender Sex Load Mechanism CMS Cascade' \
-         '/a /p /u /i /strong Ties Sociology Economic Economics History Power Image Images Main Demography Lab Labs' \
-         'Urban Rapoport Centennial America Latin Race Inequality Analysis Jury Method Methods Race' \
-         'Make Gift Work Works Occupationv Program Programs View Views Switch Switches /button Professor' \
-         'Professorship Ecology Evolution Coordinator Forms Form Active Learn Learning Education' \
-         'Educator Curriculum Active Form Forms Chair Biology Molecular Swap Employee Jr Telescope' \
-         'Future Table Tables Information Safety Informations Facility Facilities Nuclear Xray' \
-         'Specialist Specialists Project Projects Art Arts Visual Visuals Crossing Crossings' \
-         'Sound Sounds Oh Film Critic Critics Republic Republics Producer Festival Festivals' \
-         'Chemistry Organic Inorganic Major Global Globals Award Awards Awarded Welcome' \
-         'Alumna Electron Microscopy Matter Matters Nanoscale PhD Lecturer Postdoc Postdocs ' \
-         'NYU Math Maths Architectural Architecture Earth Supervisor Supervisors Surface ' \
-         'Subserface Deep Climate Water Trip Trips Workshop Workshops Lectures Public Home' \
-         'Staff Academic Academics Assistant Scientific Scholar Administrative Manager Managers' \
-         'Finance Biochemistry Marine Fax Number Biogeochemistry Appointment Appointments Geometry' \
-         'Algebraic Applied Mathematical Lectureship Code Computing Mobile Startup Robotics Robotic' \
-         'Engineering Explore Conosortium Get Involved Advisory Council Training Consulting Free ' \
-         'Tutorials FAQ FAQs Sciences Data Discovery Pattern Patterns Recognition Email Development' \
-         'Principles Gas Gases Model Modeling Develop Development Language Languages Algoritm Algoritms' \
-         'Numerical Game Serious France Germany Center Anixiety Therapy Theories Relationship Certified' \
-         'Board Thoughts Child Center Stress Laboratory Daily Promotion Psychology Room Anxiety Institute' \
-         'Econometrics Empire Energy Mexican Environment Courses Past Philosophy Ethics Aesthetics' \
-         'College Library Epistomology Ethics Hall Visit OD Us US I II Investigator Pediator Sensing' \
-         'Grants Result Results Test Tests Department Studies Anthropology Job Opportunities Nature' \
-         'Technology Islam Civilization Jewish Senior Behaviour Brain Adviser Lead Dane Admission Gallery' \
-         'Photo Volunteer Photostream Division Dance Area Performance Design Box Office Costume Theory' \
-         'Critical Participation Astronomy Interdisciplinaria Year Fourth Lectures Adjunct Tracks Curricular' \
-         'Celeste Survey Archaeological African American Teaching Secrets Identity Action Book Life Street Poor' \
-         'Labour Century Britain'
+filter = '/Button /a /button /i /p /strong /u Academic Academics Academy Action Active Active Adjunct Administrative ' \
+         'Admission Advance Adviser Advisory Aesthetics African Algebraic Algoritm Algoritms Alumna Alumni America ' \
+         'American Analysis Anixiety Anthropology Anxiety Applied Appointment Appointments Archaeological ' \
+         'Architectural Architecture Archive Area Art Arts Assistant Astronomy Austin Award Award Awarded Awards ' \
+         'Awards Bar Behaviour Biochemistry Biogeochemistry Biology Board Body Book Box Brain Britain CMS Calendar ' \
+         'Campus Career Cascade Celeste Centennial Center Center Century Certification Certified Chair Chemistry Child ' \
+         'City Civilization Climate Clinical Code Cognitive College Computing Conosortium Consulting Contact Content ' \
+         'Coordinator Costume Council Course Courses Critic Critical Critics Crossing Crossings Curricular Curriculum ' \
+         'Daily Dance Dane Data Deep Degree Demography Department Design Develop Development Development Directory ' \
+         'Discovery Division Dynamic Dynamics Earth Ecology Econometrics Economic Economics Education Educator ' \
+         'Electron Email Empire Employee Endowment Energy Engineering Environment Epistomology Ethics Ethics Evolution ' \
+         'Explore FAQ FAQ FAQs Facilities Facility Faculty Fax Fellowship Festival Festivals Film Finance Form Form ' \
+         'Forms Forms Fourth France Free Fund Future Gallery Game Gas Gases Gender Geometry Germany Get Gift Global ' \
+         'Globals Google Grants Hall Head Health History Home Houston Human Humans I II Identity Image Images ' \
+         'Inequality Information Informations Inorganic Institute Interdisciplinaria Investigator Involved Islam ' \
+         'Jewish Job Jr Jury Lab Laboratory Labour Labs Language Languages Latin Lead Learn Learning Lecturer Lectures ' \
+         'Lectures Lectureship Library Life Link LinksUH Load Main Major Make Management Manager Managers Map Maps ' \
+         'Marine Math Mathematical Maths Matter Matters Mechanism Media Medium Method Methods Mexican Microscopy ' \
+         'Mobile Model Modeling Molecular NYU Name Names Nanoscale Nature Network Networks Neuroscience Nuclear Number ' \
+         'Numerical OD Occupationv Office Oh Online Operation Operations Opportunities Organic Organizations Page ' \
+         'Pages Participation Past Pattern Patterns Pediator Performance PhD Philosophy Phone Photo Photostream ' \
+         'Physics Plan Poor Post Postdoc Postdocs Power Principles Privacy Producer Professor Professor Professorship ' \
+         'Program Program Programs Project Projects Promotion Psychology Public Race Race Rapoport Recognition ' \
+         'Relationship Report Reporting Reports Republic Republics Research Research Researcher Resource Resources ' \
+         'Result Results Robotic Robotics Room Safety Scholar School Science Sciences Scientific Secrets Security ' \
+         'Seminar Senior Sensing Serious Sex Sociology Sound Sounds Specialist Specialists Spotlight Staff Startup ' \
+         'Street Stress Student Students Studies Study Subserface Supervisor Supervisors Support Surface Survey Swap ' \
+         'Switch Switches System Systems Table Tables Teaching Technology Telescope Test Tests Texas Theories Theory ' \
+         'Therapy Thoughts Ties Tracks Training Trip Trips Tutorials US Unit University Up Urban Us View Views Visit ' \
+         'Visual Visuals Volunteer Water Welcome Work Works Workshop Workshops Xray Year Organization Berlin Chicago' \
+         'Group Geochemistry Imaging Seismic Major Majors Sequence Recruiting Prize Best English'
 
 class AppURLOpener(FancyURLopener):
     version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) ' \
@@ -150,7 +145,7 @@ def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):     # NEED2 
                     ## print('School not found, picking first:')
                     names.pop(names.index(name))
             pos2 = cont.find('&amp;', pos1 + 1)
-            if pos2-pos1 > 20:
+            if len(cont[pos1 + 10:pos2]) > 20:
                 gslink = "!!!Parser error, too long gs link!!!"
             else:
                 gslink = in_url3 + cont[pos1 + 10:pos2] # Concat GS url + ID value
@@ -160,7 +155,7 @@ def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):     # NEED2 
 
     print('-- Total people on dep page: ' + str(n))
     print('-- Total with G.S. profiles: ' + str(i) + ' (multi acc: ' + str(m) + '; school identified: ' + str(k) + ')')
-
+    print('Check:', pos2-pos1)
     return output
 
 
