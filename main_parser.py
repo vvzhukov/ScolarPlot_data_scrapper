@@ -7,7 +7,7 @@ from urllib.parse import quote
 from nameparser.parser import HumanName
 from time import sleep
 
-url1 = 'https://www.frenchanditalian.northwestern.edu/people/faculty/affiliated/' # Dept link
+url1 = 'https://www.math.northwestern.edu/people/faculty/' # Dept link
 url2 = 'http://scholar.google.com/citations?view_op=search_authors&mauthors=' # Google scholar author search link
 url3 = 'https://scholar.google.ru/citations?user=' # Google scholar user link
 school_name = 'Northwestern'
@@ -42,7 +42,9 @@ filter = '/Button /a /button /i /p /strong /u Academic Academics Academy Action 
          'Switch Switches System Systems Table Tables Teaching Technology Telescope Test Tests Texas Theories Theory ' \
          'Therapy Thoughts Ties Tracks Training Trip Trips Tutorials US Unit University Up Urban Us View Views Visit ' \
          'Visual Visuals Volunteer Water Welcome Work Works Workshop Workshops Xray Year Organization Berlin Chicago' \
-         'Group Geochemistry Imaging Seismic Major Majors Sequence Recruiting Prize Best English'
+         'Group Geochemistry Imaging Seismic Major Majors Sequence Recruiting Prize Best English French Current' \
+         'Scholarship Scholarships Culture Field Geographic Latino Committee Meaning Funds Corpus Linguistic Speech' \
+         'Speeches Phonetics Social Change Conference Women Applications Application Lunt'
 
 class AppURLOpener(FancyURLopener):
     version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) ' \
@@ -155,7 +157,6 @@ def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):     # NEED2 
 
     print('-- Total people on dep page: ' + str(n))
     print('-- Total with G.S. profiles: ' + str(i) + ' (multi acc: ' + str(m) + '; school identified: ' + str(k) + ')')
-    print('Check:', pos2-pos1)
     return output
 
 
