@@ -7,7 +7,7 @@ from urllib.parse import quote
 from nameparser.parser import HumanName
 from time import sleep
 
-url1 = 'https://www.math.northwestern.edu/people/faculty/' # Dept link
+url1 = 'https://www.neurobiology.northwestern.edu/people/core-faculty/' # Dept link
 url2 = 'http://scholar.google.com/citations?view_op=search_authors&mauthors=' # Google scholar author search link
 url3 = 'https://scholar.google.ru/citations?user=' # Google scholar user link
 school_name = 'Northwestern'
@@ -44,7 +44,8 @@ filter = '/Button /a /button /i /p /strong /u Academic Academics Academy Action 
          'Visual Visuals Volunteer Water Welcome Work Works Workshop Workshops Xray Year Organization Berlin Chicago' \
          'Group Geochemistry Imaging Seismic Major Majors Sequence Recruiting Prize Best English French Current' \
          'Scholarship Scholarships Culture Field Geographic Latino Committee Meaning Funds Corpus Linguistic Speech' \
-         'Speeches Phonetics Social Change Conference Women Applications Application Lunt'
+         'Speeches Phonetics Social Change Conference Women Applications Application Lunt Visitors Topology Team Term' \
+         'Geometric Response Emergency'
 
 class AppURLOpener(FancyURLopener):
     version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) ' \
@@ -146,8 +147,8 @@ def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):     # NEED2 
                 else:
                     ## print('School not found, picking first:')
                     names.pop(names.index(name))
-            pos2 = cont.find('&amp;', pos1 + 1)
-            if len(cont[pos1 + 10:pos2]) > 20:
+            pos2 = min(cont.find('"', pos1+1),cont.find('&amp;', pos1+1))
+            if len(cont[pos1 + 10:pos2]) > 30:
                 gslink = "!!!Parser error, too long gs link!!!"
             else:
                 gslink = in_url3 + cont[pos1 + 10:pos2] # Concat GS url + ID value
