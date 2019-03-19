@@ -7,12 +7,12 @@ from urllib.parse import quote
 from nameparser.parser import HumanName
 from time import sleep
 
-url1 = 'https://www.neurobiology.northwestern.edu/people/core-faculty/' # Dept link
+url1 = 'https://communication.northwestern.edu/departments/csd/faculty/directory.php' # Dept link
 url2 = 'http://scholar.google.com/citations?view_op=search_authors&mauthors=' # Google scholar author search link
 url3 = 'https://scholar.google.ru/citations?user=' # Google scholar user link
 school_name = 'Northwestern'
 
-filter = '/Button /a /button /i /p /strong /u Academic Academics Academy Action Active Active Adjunct Administrative ' \
+filter = '/Button /a /button /li /i /p /strong /u Academic Academics Academy Action Active Active Adjunct Administrative ' \
          'Admission Advance Adviser Advisory Aesthetics African Algebraic Algoritm Algoritms Alumna Alumni America ' \
          'American Analysis Anixiety Anthropology Anxiety Applied Appointment Appointments Archaeological ' \
          'Architectural Architecture Archive Area Art Arts Assistant Astronomy Austin Award Award Awarded Awards ' \
@@ -45,7 +45,8 @@ filter = '/Button /a /button /i /p /strong /u Academic Academics Academy Action 
          'Group Geochemistry Imaging Seismic Major Majors Sequence Recruiting Prize Best English French Current' \
          'Scholarship Scholarships Culture Field Geographic Latino Committee Meaning Funds Corpus Linguistic Speech' \
          'Speeches Phonetics Social Change Conference Women Applications Application Lunt Visitors Topology Team Term' \
-         'Geometric Response Emergency'
+         'Geometric Response Emergency Illinois Policy Washington Bureau Johns Jpurnalism Early Colleges Associated' \
+         'Indiana Foundations Adulthood Young Michigan'
 
 class AppURLOpener(FancyURLopener):
     version = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) ' \
@@ -98,7 +99,9 @@ def filterbyvalue(seq, value):  # NEED2 CORRECT EXCEPTION SECTION
 def body_parser(in_url1, in_url2, in_url3, in_filter, in_sch_name):     # NEED2 CORRECT EXCEPTION SECTION
     user_tag = '&amp;user='
     HTML = urllib.request.urlopen(in_url1)      # Getting Lab page content
-    txt = HTML.read().decode('utf-8').replace(',', ' ').replace('>', ' ').replace('<', ' ').replace('.', '')
+
+    txt = HTML.read().decode(errors='replace').replace(',', ' ').replace('>', ' ').replace('<', ' ').replace('.', '')
+    # was decode('utf-8') before facing 'can't decode' error
 
     # Code-block for conversion 'Name-Name Lastname' to 'Namename Lastname'.
     # Doesn't work on 'big' strings: Out-of-index.
